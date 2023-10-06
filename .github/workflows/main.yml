@@ -23,8 +23,10 @@ jobs:
         
     - name: npm install, build
       run: |
-        NODE_OPTIONS=--openssl-legacy-provider npm i
-        NODE_OPTIONS=--openssl-legacy-provider npm run build
+        npm i
+        npm run build
+      env:
+          NODE_OPTIONS: --openssl-legacy-provider
         
     - name: Deploy
       uses: reggionick/s3-deploy@v3
