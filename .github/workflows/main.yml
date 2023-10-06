@@ -23,12 +23,25 @@ jobs:
     #   run: |
     #     echo "VITE_REACT_APP_AWS_SERVER=${{ secrets.VITE_REACT_APP_AWS_SERVER }}" >> $GITHUB_ENV
         
-    - name: npm install, build
-      run: |
-        npm i
-        npm run build
+    # - name: npm install, build
+    #   run: |
+    #     npm i
+    #     npm run build
+    #   env:
+    #       NODE_OPTIONS: --openssl-legacy-provider
+
+    - name: Install Node modules
+      if: steps.node-cache.outputs.cache-hit != 'true'
+      run: npm ci
+      # Currently necessary for Webpack
       env:
-          NODE_OPTIONS: --openssl-legacy-provider
+        NODE_OPTIONS: --openssl-legacy-provider
+
+    - name: Build reader
+      run: npm run build
+      # Currently necessary for Webpack
+      env:
+        NODE_OPTIONS: --openssl-legacy-provider
         
     - name: Deploy
       uses: reggionick/s3-deploy@v3
