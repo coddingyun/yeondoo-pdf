@@ -173,7 +173,6 @@ async function createReader(paperId, paperItems) {
 			console.log('Deleting pages', pageIndexes, degrees);
 		}
 	});
-	readers.push(reader);
 	reader.enableAddToNote(true);
 	window._reader = reader;
 	await reader.initializedPromise;
