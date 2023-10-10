@@ -10,7 +10,7 @@ window.dev = true;
 
 let api = '';
 if (process.env.NODE_ENV === 'development'){
-	api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
+	api = 'https://be.yeondoo.net'
 }
 else if (process.env.NODE_ENV === 'production'){
 	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
