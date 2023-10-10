@@ -136,7 +136,7 @@ class AnnotationManager {
 		const paperId = sessionStorage.getItem('paperId')
 		const workspaceId = sessionStorage.getItem('workspaceId')
 		
-		postApi(api, `/api/paper/item?paperid=${paperId}&workspaceId=${workspaceId}`, payload)
+		postApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
 		.catch(error => {
 			console.log(error)
 		})

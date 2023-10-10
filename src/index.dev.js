@@ -129,7 +129,7 @@ async function createReader(paperId, paperItems) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
 
-			putApi(api, `/api/paper/item?paperid=${paperId}&workspaceId=${workspaceId}`, payload)
+			putApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
 			.catch(error => {
 				console.log(error)
 			})
