@@ -12,8 +12,6 @@ else if (process.env.NODE_ENV === 'production'){
 	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
 }
 
-const paperId = sessionStorage.getItem('paperId')
-const workspaceId = sessionStorage.getItem('workspaceId')
 class AnnotationManager {
 	constructor(options) {
 		this._filter = {
@@ -134,6 +132,9 @@ class AnnotationManager {
 
 		delete payload.type
 		delete payload.id
+
+		const paperId = sessionStorage.getItem('paperId')
+		const workspaceId = sessionStorage.getItem('workspaceId')
 		
 		postApi(api, `/api/paper/item?paperid=${paperId}&workspaceId=${workspaceId}`, payload)
 		.catch(error => {
