@@ -1,7 +1,19 @@
 import { debounce } from './lib/debounce';
 import { approximateMatch } from './lib/approximate-match';
 import { measureTextAnnotationDimensions } from '../pdf/lib/text-annotation';
+import { getCookie } from '../custom/cookie';
+import { postApi } from '../custom/utils/apiFetch'
 
+let api = '';
+if (process.env.NODE_ENV === 'development'){
+	api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
+}
+else if (process.env.NODE_ENV === 'production'){
+	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
+}
+
+const paperId = sessionStorage.getItem('paperId')
+const workspaceId = sessionStorage.getItem('workspaceId')
 class AnnotationManager {
 	constructor(options) {
 		this._filter = {
@@ -50,6 +62,11 @@ class AnnotationManager {
 		this._onChangeFilter(this._filter);
 	}
 
+	updateSettings(newAnnotations) {
+		this._annotations = newAnnotations;
+		this.render();
+	}
+
 	setReadOnly(readOnly) {
 		this._readOnly = readOnly;
 	}
@@ -72,6 +89,7 @@ class AnnotationManager {
 
 	//
 	addAnnotation(annotation) {
+		console.log(annotation)
 		if (this._readOnly) {
 			return null;
 		}
@@ -105,10 +123,28 @@ class AnnotationManager {
 		}
 		this._save(annotation);
 		this.render();
+		const payload = { ...annotation }
+		delete payload.tags
+		delete payload.authorName
+		delete payload.isAuthorNameAuthoritative
+		delete payload.sortIndex
+
+		payload.itemType = payload.type
+		payload.itemId = payload.id
+
+		delete payload.type
+		delete payload.id
+		
+		postApi(api, `/api/paper/item?paperid=${paperId}&workspaceId=${workspaceId}`, payload)
+		.catch(error => {
+			console.log(error)
+		})
+		
 		return annotation;
 	}
 
 	updateAnnotations(annotations) {
+		console.log(annotations)
 		if (this._readOnly) {
 			throw new Error('Cannot update annotation for read-only file');
 		}
@@ -165,6 +201,7 @@ class AnnotationManager {
 				);
 			}
 			this._save(annotation);
+			console.log('yes!')
 		}
 		this.render();
 	}
@@ -181,6 +218,7 @@ class AnnotationManager {
 		this._unsavedAnnotations = this._unsavedAnnotations.filter(x => !ids.includes(x.id));
 		this._onDelete(ids);
 		this.render();
+		console.log(ids)
 	}
 
 	// Note: Keep in sync with Zotero client

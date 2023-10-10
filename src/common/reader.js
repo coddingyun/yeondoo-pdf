@@ -288,6 +288,12 @@ class Reader {
 		}
 	}
 
+	updateSettings(annotation) {
+		if (typeof annotation !== 'undefined') {
+			this._annotationManager.addAnnotation(annotation)
+		}
+	}
+
 	_ensureType() {
 		if (!Array.from(arguments).includes(this._type)) {
 			throw new Error(`The operation is not supported for '${this._type}'`);

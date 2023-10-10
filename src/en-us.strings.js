@@ -108,7 +108,7 @@ export default {
 	'pdfReader.draw': 'Draw',
 	'pdfReader.erase': 'Erase',
 	'pdfReader.pickColor': 'Pick a Color',
-	'pdfReader.addToNote': 'Add to Note',
+	'pdfReader.addToNote': 'Chat with AI',
 	'pdfReader.zoomIn': 'Zoom In',
 	'pdfReader.zoomOut': 'Zoom Out',
 	'pdfReader.zoomReset': 'Reset Zoom',

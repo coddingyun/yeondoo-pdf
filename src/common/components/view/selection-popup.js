@@ -12,7 +12,9 @@ function SelectionPopup(props) {
 	}
 
 	function handleAddToNote() {
-		props.onAddToNote([props.params.annotation]);
+		// props.onAddToNote([props.params.annotation]);
+		// console.log("check!!!", props.params.annotation.text)
+		window.parent.postMessage({selectedText: props.params.annotation.text}, '*')
 	}
 
 	return (
