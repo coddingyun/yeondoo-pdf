@@ -19,9 +19,9 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
-    # - name: Generate environment variables file for production
-    #   run: |
-    #     echo "VITE_REACT_APP_AWS_SERVER=${{ secrets.VITE_REACT_APP_AWS_SERVER }}" >> $GITHUB_ENV
+    - name: Generate environment variables file for production
+      run: |
+        echo "VITE_REACT_APP_AWS_SERVER=${{ secrets.VITE_REACT_APP_AWS_SERVER }}" >> $GITHUB_ENV
         
     # - name: npm install, build
     #   run: |
