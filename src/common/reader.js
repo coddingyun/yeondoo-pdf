@@ -294,6 +294,11 @@ class Reader {
 		}
 	}
 
+	changePaper(annotation) {
+		this._annotationManager._annotations = annotation
+		this._annotationManager.render()
+	}
+
 	_ensureType() {
 		if (!Array.from(arguments).includes(this._type)) {
 			throw new Error(`The operation is not supported for '${this._type}'`);

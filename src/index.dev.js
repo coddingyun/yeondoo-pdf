@@ -10,7 +10,8 @@ window.dev = true;
 
 let api = '';
 if (process.env.NODE_ENV === 'development'){
-	api = 'https://be.yeondoo.net'
+	//api = 'https://be.yeondoo.net'
+	api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
 }
 else if (process.env.NODE_ENV === 'production'){
 	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
@@ -20,7 +21,7 @@ let reader
 
 let chatNoteList = []
 
-const receiveBasicInfo = (e) => {
+const receiveBasicInfo = async(e) => {
 	if (e.data.workspaceId) {
 		sessionStorage.setItem('workspaceId', e.data.workspaceId)
 	}
@@ -48,7 +49,18 @@ const receiveBasicInfo = (e) => {
 			delete changeItem.itemType
 			return changeItem})
 		sessionStorage.setItem('paperItemsWithTag', JSON.stringify(paperItemsWithTag))
-		createReader(e.data.paperId, paperItemsWithTag);
+		if (window._reader) {
+			console.log(e.data.paperId)
+			const res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+			const newData = {
+				buf: new Uint8Array(await res.arrayBuffer()),
+				url: new URL('/', window.location).toString()
+			}
+			reader.changePaper(paperItemsWithTag)
+			reader.reload(newData)
+		} else {
+			createReader(e.data.paperId, paperItemsWithTag);
+		}
 	}
 	if (e.data.chatNote) {
 		const paperItemsWithTag = JSON.parse(sessionStorage.getItem('paperItemsWithTag'))
@@ -83,7 +95,7 @@ async function createReader(paperId, paperItems) {
 		demo = snapshot;
 	}
 	let res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
-	console.log("hihi",Number(sessionStorage.getItem('workspaceId')))
+	// console.log("hihi",Number(sessionStorage.getItem('workspaceId')))
 	// console.log("location!!",window.location)
 	// console.log(window.location)
 	reader = new Reader({

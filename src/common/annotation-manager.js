@@ -6,7 +6,8 @@ import { postApi } from '../custom/utils/apiFetch'
 
 let api = '';
 if (process.env.NODE_ENV === 'development'){
-	api = 'https://be.yeondoo.net'
+	//api = 'https://be.yeondoo.net'
+	api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
 }
 else if (process.env.NODE_ENV === 'production'){
 	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
@@ -58,11 +59,6 @@ class AnnotationManager {
 		// Necessary to set reader._state.annotation for the first time
 		this.render();
 		this._onChangeFilter(this._filter);
-	}
-
-	updateSettings(newAnnotations) {
-		this._annotations = newAnnotations;
-		this.render();
 	}
 
 	setReadOnly(readOnly) {
