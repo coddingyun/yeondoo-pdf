@@ -288,12 +288,14 @@ class Reader {
 		}
 	}
 
+	// 추가: 연두 서비스에서 답변 내용 export 시 조테로 뷰어에 노트 업데이트
 	updateSettings(annotation) {
 		if (typeof annotation !== 'undefined') {
 			this._annotationManager.addAnnotation(annotation)
 		}
 	}
 
+	// 추가: 탭 변경시 
 	changePaper(annotation) {
 		this._annotationManager._annotations = annotation
 		this._annotationManager.render()

@@ -8,6 +8,7 @@ import { putApi, deleteApi } from './custom/utils/apiFetch';
 
 window.dev = true;
 
+// 추가: api 연결
 let api = '';
 if (process.env.NODE_ENV === 'development'){
 	api = 'https://be.yeondoo.net'
@@ -21,6 +22,7 @@ let reader
 
 let chatNoteList = []
 
+// 추가: iframe 연동
 const receiveBasicInfo = async(e) => {
 	if (e.data.workspaceId) {
 		sessionStorage.setItem('workspaceId', e.data.workspaceId)
@@ -70,17 +72,13 @@ const receiveBasicInfo = async(e) => {
 		
 		//createReader(paperId, [...paperItemsWithTag, e.data.chatNote])
 	}
-	// if (e.data.needPaperIndex) {
-	// 	reader.
-	// 	window.parent.postMessage({pageIndex: 0}, '*')
-	// }
 }
 
 window.addEventListener("message", receiveBasicInfo);
 
 window.parent.postMessage({isPdfRender: true}, '*')
 		
-
+// 변경: createReader 파라미터 추가
 async function createReader(paperId, paperItems) {
 	if (window._reader) {
 		throw new Error('Reader is already initialized');
@@ -98,10 +96,9 @@ async function createReader(paperId, paperItems) {
 	else if (type === 'snapshot') {
 		demo = snapshot;
 	}
+	// 변경: pdf 주소 받기
 	let res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
-	// console.log("hihi",Number(sessionStorage.getItem('workspaceId')))
-	// console.log("location!!",window.location)
-	// console.log(window.location)
+	
 	reader = new Reader({
 		type,
 		localizedStrings: strings,
@@ -126,6 +123,7 @@ async function createReader(paperId, paperItems) {
 		onAddToNote() {
 			alert('Add annotations to the current note');
 		},
+		// 추가: save시 put api 호출
 		onSaveAnnotations: function (annotations) {
 			const payload = {...annotations[0]}
 			delete payload.tags
@@ -151,6 +149,7 @@ async function createReader(paperId, paperItems) {
 			})
 			console.log('Save annotations', annotations);
 		},
+		// 추가: 삭제 시 delete api 호출
 		onDeleteAnnotations: function (ids) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
@@ -158,6 +157,7 @@ async function createReader(paperId, paperItems) {
 			deleteApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}&itemId=${ids}`)
 			console.log('Delete annotations', JSON.stringify(ids));
 		},
+		// 추가: view가 업데이트 될 때마다 pageIndex 보내주기
 		onChangeViewState: function (state, primary) {
 			if (state){
 				window.parent.postMessage({pageIndex: state.pageIndex}, '*')

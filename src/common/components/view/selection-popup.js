@@ -11,9 +11,9 @@ function SelectionPopup(props) {
 		props.onAddAnnotation({ ...props.params.annotation, color });
 	}
 
+	// Push to Chat 버튼 클릭시 드래그한 텍스트 전송
 	function handleAddToNote() {
 		// props.onAddToNote([props.params.annotation]);
-		// console.log("check!!!", props.params.annotation.text)
 		window.parent.postMessage({selectedText: props.params.annotation.text}, '*')
 	}
 
