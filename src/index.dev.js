@@ -72,6 +72,11 @@ const receiveBasicInfo = async(e) => {
 		
 		//createReader(paperId, [...paperItemsWithTag, e.data.chatNote])
 	}
+	if (e.data.isExportClicked) {
+		const annotations = reader._state.annotations
+		console.log(annotations)
+		window.parent.postMessage({annotations: annotations}, '*')
+	}
 }
 
 window.addEventListener("message", receiveBasicInfo);
