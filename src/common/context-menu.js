@@ -147,7 +147,8 @@ export function createAnnotationContextMenu(reader, params) {
 					label: reader._getString('pdfReader.addToNote'),
 					disabled: !reader._state.enableAddToNote,
 					persistent: true,
-					onCommand: () => reader._onAddToNote(annotations)
+					// 추가: Push to Chat 버튼 클릭시 드래그한 텍스트 전송
+					onCommand: () => window.parent.postMessage({selectedText: annotations[0].text}, '*')
 				}
 			],
 			ANNOTATION_COLORS.map(([label, color]) => ({

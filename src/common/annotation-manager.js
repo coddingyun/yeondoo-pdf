@@ -102,7 +102,8 @@ class AnnotationManager {
 		annotation.comment = annotation.comment || '';
 		annotation.tags = annotation.tags || [];
 		// Automatically set properties
-		annotation.id = this._generateObjectKey();
+		// 추가: chatNote나 proof일 때는 annotaion.id가 존재
+		annotation.id = annotation.id?annotation.id:this._generateObjectKey();
 		annotation.dateCreated = (new Date()).toISOString();
 		annotation.dateModified = annotation.dateCreated;
 		annotation.authorName = this._authorName;
@@ -121,7 +122,7 @@ class AnnotationManager {
 		delete payload.tags
 		delete payload.authorName
 		delete payload.isAuthorNameAuthoritative
-		delete payload.sortIndex
+		//delete payload.sortIndex
 
 		payload.itemType = payload.type
 		payload.itemId = payload.id
@@ -198,7 +199,6 @@ class AnnotationManager {
 				);
 			}
 			this._save(annotation);
-			console.log('yes!')
 		}
 		this.render();
 	}

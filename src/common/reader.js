@@ -301,6 +301,11 @@ class Reader {
 		this._annotationManager.render()
 	}
 
+	// 추가: 답변 근거 삭제시
+	deletePaperProof(ids) {
+		this._annotationManager.deleteAnnotations(ids)
+	}
+
 	_ensureType() {
 		if (!Array.from(arguments).includes(this._type)) {
 			throw new Error(`The operation is not supported for '${this._type}'`);

@@ -314,6 +314,7 @@ export function SidebarPreview(props) {
 			)}
 			{text}
 			{comment}
+			{/* 추가: Tag 버튼 없애기
 			{(state >= 1 && !props.readOnly || annotation.tags.length > 0)
 			&& (
 				<button
@@ -323,7 +324,7 @@ export function SidebarPreview(props) {
 					draggable={true}
 					onDragStart={handleDragStart}
 				>{tags}</button>
-			)}
+			)} */}
 		</div>
 	);
 }

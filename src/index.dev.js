@@ -5,6 +5,7 @@ import epub from '../demo/epub';
 import snapshot from '../demo/snapshot';
 import { setCookie, getCookie } from './custom/cookie'
 import { putApi, deleteApi } from './custom/utils/apiFetch';
+import { getSortIndex } from './pdf/selection';
 
 window.dev = true;
 
@@ -64,18 +65,31 @@ const receiveBasicInfo = async(e) => {
 			createReader(e.data.paperId, paperItemsWithTag);
 		}
 	}
-	if (e.data.chatNote) {
+	else if (e.data.chatNote) {
 		const paperItemsWithTag = JSON.parse(sessionStorage.getItem('paperItemsWithTag'))
-		chatNoteList.push(e.data.chatNote)
+		const payload = {
+			...e.data.chatNote,
+			sortIndex: getSortIndex(reader._primaryView._pdfPages, e.data.chatNote.position)
+		}
+		chatNoteList.push(payload)
 
-		reader.updateSettings(e.data.chatNote)
+		reader.updateSettings(payload)
 		
 		//createReader(paperId, [...paperItemsWithTag, e.data.chatNote])
 	}
-	if (e.data.isExportClicked) {
+	else if (e.data.isExportClicked) {
 		const annotations = reader._state.annotations
 		console.log(annotations)
 		window.parent.postMessage({annotations: annotations}, '*')
+	}
+	else if (e.data.proof) {
+		const proofId = e.data.proofId
+		const payload = {
+			...e.data.proof,
+			sortIndex: getSortIndex(reader._primaryView._pdfPages, e.data.proof.position)
+		}
+		reader.updateSettings(payload)
+		reader.deletePaperProof([proofId])
 	}
 }
 
@@ -134,7 +148,7 @@ async function createReader(paperId, paperItems) {
 			delete payload.tags
 			delete payload.authorName
 			delete payload.isAuthorNameAuthoritative
-			delete payload.sortIndex
+			//delete payload.sortIndex
 			delete payload.onlyTextOrComment
 
 			payload.itemType = payload.type
