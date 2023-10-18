@@ -115,7 +115,8 @@ function Selector({ tags, colors, authors, onContextMenu, onClickTag, onClickCol
 // We get significant performance boost here because `props.annotation`
 // reference is updated only when annotation data is updated
 const Annotation = React.memo((props) => {
-	return (
+	// 추가: 답변 근거일 경우 SidebarPreview 나타나지 않도록 변경
+	return ( props.annotation.noPreview ? null :
 		<div
 			tabIndex={-1}
 			className={cx('annotation', { selected: props.isSelected })}
@@ -397,15 +398,18 @@ const AnnotationsView = memo(React.forwardRef((props, ref) => {
 				tags[tag.name].inactive = true;
 			}
 		}
-		let color = annotation.color;
-		if (!colors[color]) {
-			let predefinedColor = ANNOTATION_COLORS.find(x => x[1] === color);
-			colors[color] = {
-				color,
-				selected: props.filter.colors.includes(color),
-				inactive: true,
-				name: predefinedColor ? predefinedColor[0] : null
-			};
+		// 추가: 답변 근거 표시 시에는 컬러 태그 제거
+		if (!annotation.noPreview) {
+			let color = annotation.color;
+			if (!colors[color]) {
+				let predefinedColor = ANNOTATION_COLORS.find(x => x[1] === color);
+				colors[color] = {
+					color,
+					selected: props.filter.colors.includes(color),
+					inactive: true,
+					name: predefinedColor ? predefinedColor[0] : null
+				};
+			}
 		}
 		let author = annotation.authorName;
 		if (author && !authors[author]) {
@@ -422,7 +426,10 @@ const AnnotationsView = memo(React.forwardRef((props, ref) => {
 		for (let tag of annotation.tags) {
 			tags[tag.name].inactive = false;
 		}
-		colors[annotation.color].inactive = false;
+		// 추가: 답변 근거 표시 시에는 컬러 태그 제거
+		if (!annotation.noPreview) {
+			colors[annotation.color].inactive = false;
+		}
 		let author = annotation.authorName;
 		if (author) {
 			authors[author].inactive = false;

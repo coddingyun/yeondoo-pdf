@@ -83,7 +83,6 @@ class AnnotationManager {
 
 	// 추가 시 post api 호출
 	addAnnotation(annotation) {
-		console.log(annotation)
 		if (this._readOnly) {
 			return null;
 		}

@@ -86,7 +86,8 @@ const receiveBasicInfo = async(e) => {
 		const proofId = e.data.proofId
 		const payload = {
 			...e.data.proof,
-			sortIndex: getSortIndex(reader._primaryView._pdfPages, e.data.proof.position)
+			sortIndex: getSortIndex(reader._primaryView._pdfPages, e.data.proof.position),
+			noPreview: true
 		}
 		reader.updateSettings(payload)
 		reader.deletePaperProof([proofId])
