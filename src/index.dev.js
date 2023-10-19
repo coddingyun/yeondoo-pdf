@@ -90,6 +90,7 @@ const receiveBasicInfo = async(e) => {
 			noPreview: true
 		}
 		reader.updateSettings(payload)
+		reader.setSelectedAnnotations([e.data.proof.id])
 		reader.deletePaperProof([proofId])
 	}
 }
