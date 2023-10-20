@@ -14,7 +14,7 @@ function SelectionPopup(props) {
 	// 추가: Push to Chat 버튼 클릭시 드래그한 텍스트 전송
 	function handleAddToNote() {
 		// props.onAddToNote([props.params.annotation]);
-		window.parent.postMessage({selectedText: props.params.annotation.text}, '*')
+		window.parent.postMessage({selectedText: props.params.annotation.text, position: props.params.annotation.position}, '*')
 	}
 
 	return (

@@ -148,7 +148,7 @@ export function createAnnotationContextMenu(reader, params) {
 					disabled: !reader._state.enableAddToNote,
 					persistent: true,
 					// 추가: Push to Chat 버튼 클릭시 드래그한 텍스트 전송
-					onCommand: () => window.parent.postMessage({selectedText: annotations[0].text}, '*')
+					onCommand: () => window.parent.postMessage({selectedText: annotations[0].text, position: annotations[0].position}, '*')
 				}
 			],
 			ANNOTATION_COLORS.map(([label, color]) => ({

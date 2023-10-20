@@ -12,8 +12,8 @@ window.dev = true;
 // 추가: api 연결
 let api = '';
 if (process.env.NODE_ENV === 'development'){
-	api = 'https://be.yeondoo.net'
-	//api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
+	//api = 'https://be.yeondoo.net'
+	api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
 }
 else if (process.env.NODE_ENV === 'production'){
 	api = `${process.env.VITE_REACT_APP_AWS_SERVER}`
@@ -53,14 +53,14 @@ const receiveBasicInfo = async(e) => {
 			return changeItem})
 		sessionStorage.setItem('paperItemsWithTag', JSON.stringify(paperItemsWithTag))
 		if (window._reader) {
-			console.log(e.data.paperId)
 			const res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
 			const newData = {
 				buf: new Uint8Array(await res.arrayBuffer()),
 				url: new URL('/', window.location).toString()
 			}
-			reader.changePaper(paperItemsWithTag)
-			reader.reload(newData)
+			await reader.changePaper(paperItemsWithTag)
+			await reader.reload(newData)
+			window.parent.postMessage({isUpdatedDone: true}, '*')
 		} else {
 			createReader(e.data.paperId, paperItemsWithTag);
 		}
@@ -79,7 +79,6 @@ const receiveBasicInfo = async(e) => {
 	}
 	else if (e.data.isExportClicked) {
 		const annotations = reader._state.annotations
-		console.log(annotations)
 		window.parent.postMessage({annotations: annotations}, '*')
 	}
 	else if (e.data.proof) {
@@ -90,8 +89,8 @@ const receiveBasicInfo = async(e) => {
 			noPreview: true
 		}
 		reader.updateSettings(payload)
-		reader.setSelectedAnnotations([e.data.proof.id])
 		reader.deletePaperProof([proofId])
+		reader.setSelectedAnnotations([e.data.proof.id])
 	}
 }
 
