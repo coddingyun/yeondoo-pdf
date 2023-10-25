@@ -81,6 +81,10 @@ const receiveBasicInfo = async(e) => {
 		const annotations = reader._state.annotations
 		window.parent.postMessage({annotations: annotations}, '*')
 	}
+	else if (e.data.isDownloadPdfClicked) {
+		const annotations = reader._state.annotations
+		window.parent.postMessage({pdfAnnotations: annotations}, '*')
+	}
 	else if (e.data.proof) {
 		const proofId = e.data.proofId
 		const payload = {
