@@ -34,7 +34,7 @@ const receiveBasicInfo = async(e) => {
 	if (e.data.refresh) {
 		setCookie('refresh', e.data.refresh)
 	}
-	if (e.data.paperId && e.data.paperItems && e.data.userPdf) {
+	if (e.data.paperId && e.data.paperItems) {
 		sessionStorage.setItem('paperId', e.data.paperId)
 		const paperItemsWithTag = e.data.paperItems.map((paper) => { 
 			const changeItem =  {
@@ -54,9 +54,10 @@ const receiveBasicInfo = async(e) => {
 		sessionStorage.setItem('paperItemsWithTag', JSON.stringify(paperItemsWithTag))
 		if (window._reader) {
 			let res;
-			if (userPdf) {
-				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+			if (e.data.userPdf) {
+				res = await fetch(`https://yeondoo-upload-pdf.s3.ap-northeast-2.amazonaws.com/${e.data.paperId}.pdf`);
 			} else {
+				console.log('check')
 				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
 			}
 			const newData = {
