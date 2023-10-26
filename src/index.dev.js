@@ -34,7 +34,7 @@ const receiveBasicInfo = async(e) => {
 	if (e.data.refresh) {
 		setCookie('refresh', e.data.refresh)
 	}
-	if (e.data.paperId && e.data.paperItems) {
+	if (e.data.paperId && e.data.paperItems && e.data.userPdf) {
 		sessionStorage.setItem('paperId', e.data.paperId)
 		const paperItemsWithTag = e.data.paperItems.map((paper) => { 
 			const changeItem =  {
@@ -53,7 +53,12 @@ const receiveBasicInfo = async(e) => {
 			return changeItem})
 		sessionStorage.setItem('paperItemsWithTag', JSON.stringify(paperItemsWithTag))
 		if (window._reader) {
-			const res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+			let res;
+			if (userPdf) {
+				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+			} else {
+				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+			}
 			const newData = {
 				buf: new Uint8Array(await res.arrayBuffer()),
 				url: new URL('/', window.location).toString()
@@ -62,7 +67,7 @@ const receiveBasicInfo = async(e) => {
 			await reader.reload(newData)
 			window.parent.postMessage({isUpdatedDone: true}, '*')
 		} else {
-			createReader(e.data.paperId, paperItemsWithTag);
+			createReader(e.data.paperId, paperItemsWithTag, e.data.userPdf);
 		}
 	}
 	else if (e.data.chatNote) {
@@ -103,7 +108,7 @@ window.addEventListener("message", receiveBasicInfo);
 window.parent.postMessage({isPdfRender: true}, '*')
 		
 // 변경: createReader 파라미터 추가
-async function createReader(paperId, paperItems) {
+async function createReader(paperId, paperItems, userPdf) {
 	if (window._reader) {
 		throw new Error('Reader is already initialized');
 	}
@@ -121,7 +126,12 @@ async function createReader(paperId, paperItems) {
 		demo = snapshot;
 	}
 	// 변경: pdf 주소 받기
-	let res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
+	let res;
+	if (userPdf) {
+		res = await fetch(`https://yeondoo-upload-pdf.s3.ap-northeast-2.amazonaws.com/${paperId}.pdf`)
+	} else {
+		res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
+	}
 	
 	reader = new Reader({
 		type,
