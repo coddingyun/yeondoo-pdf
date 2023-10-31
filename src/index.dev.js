@@ -57,7 +57,6 @@ const receiveBasicInfo = async(e) => {
 			if (e.data.userPdf) {
 				res = await fetch(`https://yeondoo-upload-pdf.s3.ap-northeast-2.amazonaws.com/${e.data.paperId}.pdf`);
 			} else {
-				console.log('check')
 				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
 			}
 			const newData = {
@@ -69,6 +68,7 @@ const receiveBasicInfo = async(e) => {
 			window.parent.postMessage({isUpdatedDone: true}, '*')
 		} else {
 			createReader(e.data.paperId, paperItemsWithTag, e.data.userPdf);
+			// window.parent.postMessage({createReader: true}, '*')
 		}
 	}
 	else if (e.data.chatNote) {
@@ -178,6 +178,7 @@ async function createReader(paperId, paperItems, userPdf) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
 
+			//refresh api 넣기
 			putApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
 			.catch(error => {
 				console.log(error)
@@ -189,6 +190,7 @@ async function createReader(paperId, paperItems, userPdf) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
 
+			//refresh api 넣기
 			deleteApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}&itemId=${ids}`)
 			console.log('Delete annotations', JSON.stringify(ids));
 		},
@@ -227,6 +229,8 @@ async function createReader(paperId, paperItems, userPdf) {
 			console.log('Deleting pages', pageIndexes, degrees);
 		}
 	});
+	window.parent.postMessage({createReader: true}, '*')
+
 	reader.enableAddToNote(true);
 	window._reader = reader;
 	await reader.initializedPromise;

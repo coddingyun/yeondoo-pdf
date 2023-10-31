@@ -132,6 +132,7 @@ class AnnotationManager {
 		const paperId = sessionStorage.getItem('paperId')
 		const workspaceId = sessionStorage.getItem('workspaceId')
 		
+		//refresh api 넣기
 		postApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
 		.catch(error => {
 			console.log(error)
