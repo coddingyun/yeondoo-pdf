@@ -132,10 +132,15 @@ class AnnotationManager {
 		const paperId = sessionStorage.getItem('paperId')
 		const workspaceId = sessionStorage.getItem('workspaceId')
 		
-		//refresh api 넣기
 		postApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
-		.catch(error => {
-			console.log(error)
+		.then(async response => {
+			if (response.status === 200) {
+				return response
+			} else if (response.status === 401) {
+				await refreshApi(api)
+			} else {
+				throw new Error("논문 노팅을 추가하는데 실패하였습니다.")
+			}
 		})
 		
 		return annotation;

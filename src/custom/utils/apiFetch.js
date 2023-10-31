@@ -35,7 +35,7 @@ export const deleteApi = (apiEndPoint, api) => {
     })
 }
 
-export const refreshApi = (apiEndPoint, notify, navigate) => {
+export const refreshApi = async (apiEndPoint) => {
     return fetch(`${apiEndPoint}/api/update/token`
     , {
         headers: {
@@ -44,8 +44,8 @@ export const refreshApi = (apiEndPoint, notify, navigate) => {
     }
     ).then(response => {
         if (response.status === 401) {
-          navigate('/login')
-          notify('Login time has expired')
+          window.location.href = '/login'
+          //notify('Login time has expired')
           throw new Error('로그아웃')
         }
         else if (response.status === 200) {

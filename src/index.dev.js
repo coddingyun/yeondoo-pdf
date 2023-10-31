@@ -4,7 +4,7 @@ import pdf from '../demo/pdf';
 import epub from '../demo/epub';
 import snapshot from '../demo/snapshot';
 import { setCookie, getCookie } from './custom/cookie'
-import { putApi, deleteApi } from './custom/utils/apiFetch';
+import { putApi, deleteApi, refreshApi } from './custom/utils/apiFetch';
 import { getSortIndex } from './pdf/selection';
 
 window.dev = true;
@@ -178,10 +178,15 @@ async function createReader(paperId, paperItems, userPdf) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
 
-			//refresh api 넣기
 			putApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}`, payload)
-			.catch(error => {
-				console.log(error)
+			.then(async response => {
+				if (response.status === 200) {
+					return response
+				} else if (response.status === 401) {
+					await refreshApi(api)
+				} else {
+					throw new Error("논문 노팅을 수정하는데 실패하였습니다.")
+				}
 			})
 			console.log('Save annotations', annotations);
 		},
@@ -190,8 +195,16 @@ async function createReader(paperId, paperItems, userPdf) {
 			const paperId = sessionStorage.getItem('paperId')
 			const workspaceId = sessionStorage.getItem('workspaceId')
 
-			//refresh api 넣기
 			deleteApi(api, `/api/paper/item?paperId=${paperId}&workspaceId=${workspaceId}&itemId=${ids}`)
+			.then(async response => {
+				if (response.status === 200) {
+					return response
+				} else if (response.status === 401) {
+					await refreshApi(api)
+				} else {
+					throw new Error("논문 노팅을 삭제하는데 실패하였습니다.")
+				}
+			})
 			console.log('Delete annotations', JSON.stringify(ids));
 		},
 		// 추가: view가 업데이트 될 때마다 pageIndex 보내주기
