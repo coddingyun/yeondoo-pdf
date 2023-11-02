@@ -156,7 +156,7 @@ async function createReader(paperId, paperItems, userPdf) {
 			reader.openContextMenu(params);
 		},
 		onAddToNote() {
-			alert('Add annotations to the current note');
+			alert('Add annotations to the current note'); // 연두에서 사용하지 않음 (push to chat으로 바꾸었음)
 		},
 		// 추가: save시 put api 호출
 		onSaveAnnotations: function (annotations) {
@@ -221,7 +221,8 @@ async function createReader(paperId, paperItems, userPdf) {
 			console.log('onClosePopup', data);
 		},
 		onOpenLink(url) {
-			alert('Navigating to an external link: ' + url);
+			window.open(url)
+			//alert('Navigating to an external link: ' + url);
 		},
 		onToggleSidebar: (open) => {
 			console.log('Sidebar toggled', open);

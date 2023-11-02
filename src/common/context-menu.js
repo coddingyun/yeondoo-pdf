@@ -143,7 +143,8 @@ export function createAnnotationContextMenu(reader, params) {
 		y: params.y,
 		itemGroups: createItemGroup([
 			[
-				(reader._platform === 'zotero' || window.dev) && {
+				// 추가: text가 있는 highlight와 underline만 push to chat 버튼 존재
+				(reader._platform === 'zotero' || window.dev && annotations.every(x => x.type === 'highlight' || x.type === 'underline')) && {
 					label: reader._getString('pdfReader.addToNote'),
 					disabled: !reader._state.enableAddToNote,
 					persistent: true,
@@ -193,28 +194,29 @@ export function createAnnotationContextMenu(reader, params) {
 					onCommand: () => reader._sidebarEditAnnotationText(params.ids[0])
 				}
 			],
-			[
-				(reader._platform === 'zotero' || window.dev) && {
-					label: reader._getString('pdfReader.copyImage'),
-					disabled: !(params.ids.length === 1 && reader._state.annotations.find(x => x.id === params.ids[0] && x.type === 'image')),
-					onCommand: () => {
-						let annotation = reader._state.annotations.find(x => params.ids.includes(x.id));
-						if (annotation) {
-							reader._onCopyImage(annotation.image);
-						}
-					}
-				},
-				(reader._platform === 'zotero' || window.dev) && {
-					label: reader._getString('pdfReader.saveImageAs'),
-					disabled: !(params.ids.length === 1 && reader._state.annotations.find(x => x.id === params.ids[0] && x.type === 'image')),
-					onCommand: () => {
-						let annotation = reader._state.annotations.find(x => params.ids.includes(x.id));
-						if (annotation) {
-							reader._onSaveImageAs(annotation.image);
-						}
-					}
-				}
-			],
+			// 추가: copy image, save image as 버튼 삭제
+			// [
+			// 	(reader._platform === 'zotero' || window.dev) && {
+			// 		label: reader._getString('pdfReader.copyImage'),
+			// 		disabled: !(params.ids.length === 1 && reader._state.annotations.find(x => x.id === params.ids[0] && x.type === 'image')),
+			// 		onCommand: () => {
+			// 			let annotation = reader._state.annotations.find(x => params.ids.includes(x.id));
+			// 			if (annotation) {
+			// 				reader._onCopyImage(annotation.image);
+			// 			}
+			// 		}
+			// 	},
+			// 	(reader._platform === 'zotero' || window.dev) && {
+			// 		label: reader._getString('pdfReader.saveImageAs'),
+			// 		disabled: !(params.ids.length === 1 && reader._state.annotations.find(x => x.id === params.ids[0] && x.type === 'image')),
+			// 		onCommand: () => {
+			// 			let annotation = reader._state.annotations.find(x => params.ids.includes(x.id));
+			// 			if (annotation) {
+			// 				reader._onSaveImageAs(annotation.image);
+			// 			}
+			// 		}
+			// 	}
+			// ],
 			[
 				{
 					label: reader._getString('general.delete'),

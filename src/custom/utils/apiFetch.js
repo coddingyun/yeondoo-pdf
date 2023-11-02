@@ -44,8 +44,7 @@ export const refreshApi = async (apiEndPoint) => {
     }
     ).then(response => {
         if (response.status === 401) {
-          window.location.href = '/login'
-          //notify('Login time has expired')
+          window.parent.postMessage({requireLogin: true}, '*')
           throw new Error('로그아웃')
         }
         else if (response.status === 200) {
