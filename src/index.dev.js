@@ -184,6 +184,8 @@ async function createReader(paperId, paperItems, userPdf) {
 					return response
 				} else if (response.status === 401) {
 					await refreshApi(api)
+				} else if (response.status === 400) {
+					navigate(`/home`)
 				} else {
 					throw new Error("논문 노팅을 수정하는데 실패하였습니다.")
 				}
@@ -201,6 +203,8 @@ async function createReader(paperId, paperItems, userPdf) {
 					return response
 				} else if (response.status === 401) {
 					await refreshApi(api)
+				} else if (response.status === 400) {
+					navigate(`/home`)
 				} else {
 					throw new Error("논문 노팅을 삭제하는데 실패하였습니다.")
 				}

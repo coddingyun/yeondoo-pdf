@@ -138,7 +138,9 @@ class AnnotationManager {
 				return response
 			} else if (response.status === 401) {
 				await refreshApi(api)
-			} else {
+			} else if (response.status === 400) {
+				navigate(`/home`)
+			}else {
 				throw new Error("논문 노팅을 추가하는데 실패하였습니다.")
 			}
 		})
