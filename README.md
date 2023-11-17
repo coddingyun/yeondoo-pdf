@@ -1,4 +1,5 @@
 # yeondoo-pdf
+[![Build Status](https://github.com/coddingyun/yeondoo-pdf/actions/workflows/main.yml/badge.svg)](https://github.com/coddingyun/yeondoo-pdf/actions)
 
 ## How to Start
 ### Build
