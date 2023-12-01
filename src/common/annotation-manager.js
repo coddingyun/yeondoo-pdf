@@ -6,7 +6,7 @@ import { postApi } from '../custom/utils/apiFetch'
 
 let api = '';
 if (process.env.NODE_ENV === 'development'){
-	api = 'https://be.yeondoo.net'
+	api = 'https://be.yeon-doo.com'
 	// api = 'https://virtserver.swaggerhub.com/SYLEELSW_1/Yeondoo/2.0'
 }
 else if (process.env.NODE_ENV === 'production'){
