@@ -9,7 +9,7 @@ import { getSortIndex } from './pdf/selection';
 
 window.dev = true;
 
-// 추가: api 연결
+// 추가: api 연결 
 let api = '';
 if (process.env.NODE_ENV === 'development'){
 	api = 'https://be.yeon-doo.com'
