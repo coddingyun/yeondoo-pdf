@@ -55,7 +55,7 @@ const receiveBasicInfo = async(e) => {
 		if (window._reader) {
 			let res;
 			if (e.data.userPdf) {
-				res = await fetch(`https://yeondoo-upload-pdf.s3.ap-northeast-2.amazonaws.com/${e.data.paperId}.pdf`);
+				res = await fetch(`https://yeondoo-be-upload-pdf.s3.ap-northeast-2.amazonaws.com/${e.data.paperId}.pdf`);
 			} else {
 				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
 			}
@@ -129,7 +129,7 @@ async function createReader(paperId, paperItems, userPdf) {
 	// 변경: pdf 주소 받기
 	let res;
 	if (userPdf) {
-		res = await fetch(`https://yeondoo-upload-pdf.s3.ap-northeast-2.amazonaws.com/${paperId}.pdf`)
+		res = await fetch(`https://yeondoo-be-upload-pdf.s3.ap-northeast-2.amazonaws.com/${paperId}.pdf`)
 	} else {
 		res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
 	}
