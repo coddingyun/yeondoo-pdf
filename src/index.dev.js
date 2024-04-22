@@ -57,7 +57,7 @@ const receiveBasicInfo = async(e) => {
 			if (e.data.userPdf) {
 				res = await fetch(`https://yeondoo-be-upload-pdf.s3.ap-northeast-2.amazonaws.com/${e.data.paperId}.pdf`);
 			} else {
-				res = await fetch(`https://browse.arxiv.org/pdf/${e.data.paperId}.pdf`);
+				res = await fetch(`${api}/api/paper/file/${e.data.paperId}`);
 			}
 			const newData = {
 				buf: new Uint8Array(await res.arrayBuffer()),
@@ -131,7 +131,7 @@ async function createReader(paperId, paperItems, userPdf) {
 	if (userPdf) {
 		res = await fetch(`https://yeondoo-be-upload-pdf.s3.ap-northeast-2.amazonaws.com/${paperId}.pdf`)
 	} else {
-		res = await fetch(`https://browse.arxiv.org/pdf/${paperId}.pdf`);
+		res = await fetch(`${api}/api/paper/file/${paperId}.pdf`);
 	}
 	
 	reader = new Reader({
