@@ -131,7 +131,7 @@ async function createReader(paperId, paperItems, userPdf) {
 	if (userPdf) {
 		res = await fetch(`https://yeondoo-be-upload-pdf.s3.ap-northeast-2.amazonaws.com/${paperId}.pdf`)
 	} else {
-		res = await fetch(`${api}/api/paper/file/${paperId}.pdf`);
+		res = await fetch(`${api}/api/paper/file/${paperId}`);
 	}
 	
 	reader = new Reader({
